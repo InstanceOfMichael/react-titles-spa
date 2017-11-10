@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'react-router-redux'
 import store, { history } from './store'
 import App from './containers/app'
 
+import 'semantic-ui-css/semantic.min.css'
 import 'sanitize.css/sanitize.css'
 import './index.css'
 
