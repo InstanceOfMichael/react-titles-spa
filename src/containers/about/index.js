@@ -1,9 +1,12 @@
 import React from 'react'
+import { Header } from 'semantic-ui-react'
 
 const About = () => (
   <div>
-    <h1>About Page</h1>
-    <p>Did you get here via Redux?</p>
+    <Header as='h1' dividing>
+      About Page
+    </Header>
+    <p>This React application was developed by Michael Parker</p>
   </div>
 )
 

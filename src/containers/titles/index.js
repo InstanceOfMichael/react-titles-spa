@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { Header, Segment, Icon, Input } from 'semantic-ui-react'
 
 class Titles extends Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
+      search: '',
       loading: null,
       collection: { data: []},
     }
   }
 
-  componentWillMount() {
+  fetchItems() {
     this.setState({
       loading: true,
     });
 
-    axios.get('http://localhost:3001/api/titles')
+    axios.get('http://localhost:3001/api/titles', {
+      params: {
+        search: this.state.search || null
+      },
+    })
       .then(response => {
         console.log({response})
         this.setState({
@@ -35,20 +42,50 @@ class Titles extends Component {
       })
   }
 
+  componentWillMount() {
+    this.fetchItems();
+  }
+
+  searchOnChange(event) {
+    this.setState({
+      search: event.target.value,
+    });
+  }
+
+  searchOnKeyUp(event) {
+    this.fetchItems();
+  }
+
   render() {
+    const loading = !!this.state.loading;
     const titles = this.state.collection.data.map(title =>
-      <li key={title.id}>
+      <Segment attached key={title.id}>
         <Link to={`/titles/${title.id}`}>
-          {title.title_name}
+          {title.title_name} ({title.release_year})
         </Link>
-      </li>
+      </Segment>
     )
     return (
       <div>
-        <h1>Titles Index</h1>
-        <p>Did you get here via Redux?</p>
-        <ul>{titles}</ul>
-        <p>Loading</p>
+        <Header as='h1' dividing>
+          Titles Index
+        </Header>
+        <Input
+          value={this.state.search}
+          onChange={e => this.searchOnChange(e)}
+          onKeyUp={e => this.searchOnKeyUp(e)}
+          icon={
+            <Icon name='search' inverted circular link />
+          }
+          placeholder='Search...'
+        />
+        {loading ? (
+          <p>Loading</p>
+        ) : (
+          <Segment.Group>
+            {titles}
+          </Segment.Group>
+        )}
       </div>
     )
   }

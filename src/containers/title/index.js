@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+import { Header, Segment, Label } from 'semantic-ui-react'
 
 class Titles extends Component {
 
@@ -46,106 +47,60 @@ class Titles extends Component {
           <p>Loading</p>
         ) : (
           <div>
-            <h1>Title: {title.title_name}</h1>
-            <p>
+            <Header as='h1' dividing>
+              {title.title_name}
+            </Header>
+
+            <Segment attached>
               <strong>Release Year:</strong> {title.release_year}
-            </p>
-            <div>
-              <h3>Genres</h3>
-              <ul>
-                {title.genres.map(genre => (
-                  <li key={genre.id}>{genre.name}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3>Awards</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Award</th>
-                    <th>Company</th>
-                    <th>Year</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {title.awards.map(award => (
-                    <tr key={award.id}>
-                      <td>{award.award}</td>
-                      <td>{award.award_company}</td>
-                      <td>{award.award_year}</td>
-                      <td>{award.award_won ? (
-                        'Won'
-                      ) : (
-                        'Only Nominated'
-                      )}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <h3>Participants</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {title.participants.map(participant => (
-                    <tr key={participant.id}>
-                      <td>{participant.name}</td>
-                      <td>{participant.participant_type}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <h3>Storylines</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Language</th>
-                    <th>Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {title.storylines.map(storyline => (
-                    <tr key={storyline.id}>
-                      <td>{storyline.type}</td>
-                      <td>{storyline.description}</td>
-                      <td>{storyline.language}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <h3>Names in Other Languages</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Language</th>
-                    <th>Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {title.other_names.map(other_name => (
-                    <tr key={other_name.id}>
-                      <td>{other_name.title_name}</td>
-                      <td>{other_name.title_name_language}</td>
-                      <td>{other_name.title_name_type}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            </Segment>
+            <Segment attached>
+              <strong>Genres:</strong>&nbsp;
+              {title.genres.map(genre => genre.name).join(', ')}
+            </Segment>
+
+            <Header as='h4' attached='top' block>Awards</Header>
+            {title.awards.map(award => (
+              <Segment key={award.id} attached>
+                {award.award_year} {award.award}
+                &nbsp;
+                {award.award_won ? (
+                  <Label color='green'>Won</Label>
+                ) : (
+                  <Label color='grey'>Only Nominated</Label>
+                )}
+              </Segment>
+            ))}
+
+            <Header as='h4' attached='top' block>Participants</Header>
+            {title.participants.map(participant => (
+              <Segment key={participant.id} attached>
+                {participant.name}
+                &nbsp;
+                <Label>{participant.participant_type}</Label>
+              </Segment>
+            ))}
+
+            <Header as='h4' attached='top' block>Storylines</Header>
+            {title.storylines.map(storyline => (
+              <Segment key={storyline.id} attached>
+                <Label>{storyline.language}</Label>&nbsp;
+                {storyline.description}
+                &nbsp;
+                <small>({storyline.type})</small>
+              </Segment>
+            ))}
+
+            <Header as='h4' attached='top' block>Names in Other Languages</Header>
+            {title.other_names.map(other_name => (
+              <Segment key={other_name.id} attached>
+                <Label>{other_name.title_name_language}</Label>&nbsp;
+                {other_name.title_name}
+                &nbsp;
+                <small>({other_name.title_name_type})</small>
+              </Segment>
+            ))}
+
           </div>
         )}
       </div>
